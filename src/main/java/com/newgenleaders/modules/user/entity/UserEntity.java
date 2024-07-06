@@ -2,7 +2,6 @@ package com.newgenleaders.modules.user.entity;
 
 import com.newgenleaders.modules.role.entity.RoleEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jdk.jfr.Name;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,7 +25,7 @@ public class UserEntity implements Serializable {
     private String username;
 
     @Column(unique = true)
-    private Email email;
+    private String email;
 
     private String password;
 
@@ -36,7 +35,7 @@ public class UserEntity implements Serializable {
     @UpdateTimestamp
     private LocalDate updated_at;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "tb_users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -60,11 +59,11 @@ public class UserEntity implements Serializable {
         this.username = username;
     }
 
-    public Email getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Email email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
