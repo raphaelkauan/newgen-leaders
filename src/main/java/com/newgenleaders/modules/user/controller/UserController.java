@@ -1,6 +1,7 @@
 package com.newgenleaders.modules.user.controller;
 
 import com.newgenleaders.modules.user.dto.UserRequestDto;
+import com.newgenleaders.modules.user.dto.UserResponseDto;
 import com.newgenleaders.modules.user.repository.UserRepository;
 import com.newgenleaders.modules.user.service.UserService;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<?> createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
         return userService.createUser(userRequestDto);
     }
 }
