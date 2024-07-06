@@ -10,7 +10,7 @@ public record UserRequestDto(
     String username,
 
     @NotNull(message = "Campo obrigatório!")
-    @Email(message = "Email inválido")
+    @Email(message = "Email inválido!")
     String email,
 
     @NotNull
