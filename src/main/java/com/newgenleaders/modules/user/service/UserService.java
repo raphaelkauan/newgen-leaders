@@ -39,6 +39,5 @@ public class UserService {
         UserResponseDto userResponseDto = new UserResponseDto(user.getUsername(), "Usário criado com sucesso!");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
-
     }
 }
