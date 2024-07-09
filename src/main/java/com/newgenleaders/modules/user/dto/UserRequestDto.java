@@ -13,7 +13,7 @@ public record UserRequestDto(
     @Email(message = "Email inválido!")
     String email,
 
-    @NotNull
+    @NotNull(message = "Campo obrigatório!")
     String password
 ) {
 }

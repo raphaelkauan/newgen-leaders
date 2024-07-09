@@ -8,6 +8,7 @@ import com.newgenleaders.modules.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,9 +18,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
@@ -32,7 +35,7 @@ public class UserService {
         UserEntity user = new UserEntity();
         user.setUsername(userRequestDto.username());
         user.setEmail(userRequestDto.email());
-        user.setPassword(userRequestDto.password());
+        user.setPassword(bCryptPasswordEncoder.encode(userRequestDto.password()));
 
         userRepository.save(user);
 

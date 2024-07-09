@@ -1,10 +1,13 @@
 package com.newgenleaders.modules.user.entity;
 
 import com.newgenleaders.modules.role.entity.RoleEntity;
+import com.newgenleaders.modules.security.auth.dto.LoginRequestDto;
 import jakarta.persistence.*;
 import jdk.jfr.Name;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -97,5 +100,9 @@ public class UserEntity implements Serializable {
 
     public void setRoleEntities(Set<RoleEntity> roleEntities) {
         this.roleEntities = roleEntities;
+    }
+
+    public boolean isLoginCorrect(LoginRequestDto loginRequestDto, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(loginRequestDto.password(), this.password);
     }
 }
