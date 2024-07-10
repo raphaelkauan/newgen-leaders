@@ -41,6 +41,22 @@ public class LoginService {
         var now = Instant.now();
         var expiresIn = 800L;
 
+        if(loginRequestDto.username().equals("adminSUPER")) {
+            var claims = JwtClaimsSet.builder()
+                    .issuer("api")
+                    .subject(user.get().getIdUser().toString())
+                    .issuedAt(now)
+                    .expiresAt(now.plusSeconds(expiresIn))
+                    .claim("scope", loginRequestDto.username())
+                    .build();
+
+            var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
+            System.out.println("---------------" + "admin");
+
+            return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDto(jwtValue));
+        }
+
         var claims = JwtClaimsSet.builder()
                 .issuer("api")
                 .subject(user.get().getIdUser().toString())

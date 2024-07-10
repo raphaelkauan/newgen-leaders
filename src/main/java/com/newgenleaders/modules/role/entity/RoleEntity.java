@@ -10,9 +10,10 @@ public class RoleEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
+    @Column(name = "role_id", unique = true)
     private long roleId;
 
+    @Column(unique = true)
     private String name;
 
     public long getRoleId() {
