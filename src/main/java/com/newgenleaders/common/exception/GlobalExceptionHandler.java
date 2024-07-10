@@ -19,4 +19,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionFilters, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(PostLengthException.class)
+    public ResponseEntity<ExceptionFilters> postLengthException(PostLengthException exception) {
+        ExceptionFilters exceptionFilters = new ExceptionFilters(
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(exceptionFilters, HttpStatus.BAD_REQUEST);
+    }
+
 }
