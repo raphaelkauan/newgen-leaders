@@ -1,5 +1,6 @@
 package com.newgenleaders.modules.role.service;
 
+import com.newgenleaders.common.exception.RoleConflictException;
 import com.newgenleaders.common.exception.UserConflictException;
 import com.newgenleaders.modules.role.dto.RoleRequestDto;
 import com.newgenleaders.modules.role.entity.RoleEntity;
@@ -25,7 +26,7 @@ public class RoleService {
 
     public ResponseEntity<?> createRole(@RequestBody @Valid RoleRequestDto roleRequestDto, JwtAuthenticationToken jwtAuthenticationToken) {
         if(roleRepository.existsByName(roleRequestDto.name())) {
-            throw new UserConflictException("test");
+            throw new RoleConflictException("Essa role já existe!");
         }
 
         RoleEntity roleEntity = new RoleEntity();

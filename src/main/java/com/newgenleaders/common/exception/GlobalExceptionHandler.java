@@ -28,4 +28,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionFilters, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RoleConflictException.class)
+    public ResponseEntity<ExceptionFilters> roleConflictException(RoleConflictException exception) {
+        ExceptionFilters exceptionFilters = new ExceptionFilters(
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(exceptionFilters, HttpStatus.CONFLICT);
+    }
 }
