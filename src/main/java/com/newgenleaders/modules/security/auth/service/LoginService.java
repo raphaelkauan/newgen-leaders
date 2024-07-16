@@ -52,8 +52,6 @@ public class LoginService {
 
             var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-            System.out.println("---------------" + "admin");
-
             return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDto(jwtValue));
         }
 

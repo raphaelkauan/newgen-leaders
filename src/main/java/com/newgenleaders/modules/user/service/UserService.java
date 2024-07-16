@@ -3,11 +3,13 @@ package com.newgenleaders.modules.user.service;
 import com.newgenleaders.common.exception.UserConflictException;
 import com.newgenleaders.modules.role.entity.RoleEntity;
 import com.newgenleaders.modules.role.repository.RoleRepository;
+import com.newgenleaders.modules.user.dto.MailDto;
 import com.newgenleaders.modules.user.dto.UserRequestDto;
 import com.newgenleaders.modules.user.dto.UserResponseDto;
 import com.newgenleaders.modules.user.entity.UserEntity;
 import com.newgenleaders.modules.user.repository.UserRepository;
 import jakarta.validation.Valid;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,11 +26,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RoleRepository roleRepository;
+    private final RabbitTemplate rabbitTemplate;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository, RabbitTemplate rabbitTemplate) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.roleRepository = roleRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
@@ -40,8 +44,6 @@ public class UserService {
 
         RoleEntity roleBasic = roleRepository.findByName(RoleEntity.Values.basic.name());
 
-        System.out.println("----------" + roleBasic);
-
         UserEntity user = new UserEntity();
         user.setUsername(userRequestDto.username());
         user.setEmail(userRequestDto.email());
@@ -51,6 +53,9 @@ public class UserService {
         userRepository.save(user);
 
         UserResponseDto userResponseDto = new UserResponseDto(user.getUsername(), "Usário criado com sucesso!");
+
+        MailDto mailDto = new MailDto(userRequestDto.username(), userRequestDto.email());
+        rabbitTemplate.convertAndSend("v1.queue-mail", mailDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
