@@ -17,8 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.management.relation.Role;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -55,7 +54,10 @@ public class UserService {
         UserResponseDto userResponseDto = new UserResponseDto(user.getUsername(), "Usário criado com sucesso!");
 
         MailDto mailDto = new MailDto(userRequestDto.username(), userRequestDto.email());
-        rabbitTemplate.convertAndSend("v1.queue-mail", mailDto);
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("pattern", "v1.queue-mail");
+        msg.put("data", mailDto);
+        rabbitTemplate.convertAndSend("v1.queue-mail", msg);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
