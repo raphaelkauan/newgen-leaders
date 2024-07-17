@@ -36,9 +36,10 @@ public class UserService {
 
     public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
         Optional<UserEntity> usernameValidation = userRepository.findByUsername(userRequestDto.username());
+        Optional<UserEntity> emailValidation = userRepository.findByEmail(userRequestDto.email());
 
-        if(usernameValidation.isPresent()) {
-            throw new UserConflictException("Esse nome de usuário já existe!");
+        if(usernameValidation.isPresent() || emailValidation.isPresent()) {
+            throw new UserConflictException("Esse nome de usuário ou email já existem.");
         }
 
         RoleEntity roleBasic = roleRepository.findByName(RoleEntity.Values.basic.name());
