@@ -1,13 +1,14 @@
 package com.newgenleaders.modules.user.controller;
 
+import com.newgenleaders.modules.user.dto.UserProfileDto;
 import com.newgenleaders.modules.user.dto.UserRequestDto;
 import com.newgenleaders.modules.user.dto.UserResponseDto;
 import com.newgenleaders.modules.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -18,8 +19,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/user")
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
-        return userService.createUser(userRequestDto);
+    @PostMapping("/register-user")
+    public ResponseEntity<UserResponseDto> registerUser(@RequestBody @Valid UserRequestDto userRequestDto) {
+        return userService.registerUser(userRequestDto);
+    }
+
+    @GetMapping("/profile/{user_id}")
+    public ResponseEntity<UserProfileDto> userProfile(@PathVariable(value = "user_id") UUID userId) {
+        return userService.userProfile(userId);
     }
 }

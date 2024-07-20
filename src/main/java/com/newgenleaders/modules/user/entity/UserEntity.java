@@ -22,7 +22,7 @@ public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Name("user_id")
-    private UUID idUser;
+    private UUID userId;
 
     @Column(unique = true)
     private String username;
@@ -47,11 +47,11 @@ public class UserEntity implements Serializable {
     private Set<RoleEntity> roleEntities;
 
     public UUID getIdUser() {
-        return idUser;
+        return userId;
     }
 
     public void setIdUser(UUID idUser) {
-        this.idUser = idUser;
+        this.userId = idUser;
     }
 
     public String getUsername() {

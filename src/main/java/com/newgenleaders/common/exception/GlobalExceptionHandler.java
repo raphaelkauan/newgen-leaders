@@ -14,7 +14,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionFilters> userConflictException(UserConflictException exception) {
         ExceptionFilters exceptionFilters = new ExceptionFilters(
                 exception.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value()
         );
         return new ResponseEntity<>(exceptionFilters, HttpStatus.CONFLICT);
     }
@@ -23,7 +24,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionFilters> postLengthException(PostLengthException exception) {
         ExceptionFilters exceptionFilters = new ExceptionFilters(
                 exception.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value()
         );
         return new ResponseEntity<>(exceptionFilters, HttpStatus.BAD_REQUEST);
     }
@@ -32,8 +34,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionFilters> roleConflictException(RoleConflictException exception) {
         ExceptionFilters exceptionFilters = new ExceptionFilters(
                 exception.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value()
         );
         return new ResponseEntity<>(exceptionFilters, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserInvalid.class)
+    public ResponseEntity<?> userInvalid(UserInvalid exception) {
+        ExceptionFilters exceptionFilters = new ExceptionFilters(
+                exception.getMessage(),
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(exceptionFilters, HttpStatus.BAD_REQUEST);
     }
 }

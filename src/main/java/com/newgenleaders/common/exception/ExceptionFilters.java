@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 public class ExceptionFilters {
     private String message;
     private LocalDateTime timestamp;
+    private int status;
 
-    public ExceptionFilters(String message, LocalDateTime timestamp) {
+    public ExceptionFilters(String message, LocalDateTime timestamp, int status) {
         this.message = message;
         this.timestamp = timestamp;
+        this.status = status;
     }
 
     public String getMessage() {
@@ -25,5 +27,13 @@ public class ExceptionFilters {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
