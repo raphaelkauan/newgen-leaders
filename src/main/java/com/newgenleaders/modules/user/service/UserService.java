@@ -38,7 +38,7 @@ public class UserService {
         this.postRepository = postRepository;
     }
 
-    public ResponseEntity<UserResponseDto> registerUser(@RequestBody @Valid UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> registerUser(UserRequestDto userRequestDto) {
         Optional<UserEntity> usernameValidation = userRepository.findByUsername(userRequestDto.username());
         Optional<UserEntity> emailValidation = userRepository.findByEmail(userRequestDto.email());
 
@@ -56,7 +56,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        UserResponseDto userResponseDto = new UserResponseDto(user.getUsername(), "Usário criado com sucesso!");
+        UserResponseDto userResponseDto = new UserResponseDto("Usário criado com sucesso.");
 
         // Envia username e email para fila.
         MailDto mailDto = new MailDto(userRequestDto.username(), userRequestDto.email());
@@ -88,7 +88,7 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(userProfileDto);
     }
 
-    public ResponseEntity<?> userUpdate(UUID userId, UserUpdateDto userUpdateDto, JwtAuthenticationToken jwt) {
+    public ResponseEntity<UserResponseDto> userUpdate(UUID userId, UserUpdateDto userUpdateDto, JwtAuthenticationToken jwt) {
         Optional<UserEntity> findUser = userRepository.findById(userId);
 
         if(findUser.isEmpty()) {
@@ -101,9 +101,9 @@ public class UserService {
         if(userEntity.getIdUser().equals(UUID.fromString(jwt.getName()))) {
             userRepository.save(userEntity);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Você não tem permissão para atualizar esse usuário.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new UserResponseDto("Você não tem permissão para atualizar esse usuário."));
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso.");
+        return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDto("Usário criado com sucesso."));
     }
 }
