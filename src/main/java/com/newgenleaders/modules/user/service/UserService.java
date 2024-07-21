@@ -15,6 +15,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -57,6 +58,7 @@ public class UserService {
 
         UserResponseDto userResponseDto = new UserResponseDto(user.getUsername(), "Usário criado com sucesso!");
 
+        // Envia username e email para fila.
         MailDto mailDto = new MailDto(userRequestDto.username(), userRequestDto.email());
         Map<String, Object> msg = new HashMap<>();
         msg.put("pattern", "v1.queue-mail");
@@ -84,5 +86,24 @@ public class UserService {
         UserProfileDto userProfileDto = new UserProfileDto(userDto, postDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(userProfileDto);
+    }
+
+    public ResponseEntity<?> userUpdate(UUID userId, UserUpdateDto userUpdateDto, JwtAuthenticationToken jwt) {
+        Optional<UserEntity> findUser = userRepository.findById(userId);
+
+        if(findUser.isEmpty()) {
+            throw new UserInvalid("Esse usuário não existe.");
+        }
+
+        UserEntity userEntity = findUser.get();
+        userEntity.setUsername(userUpdateDto.username());
+
+        if(userEntity.getIdUser().equals(UUID.fromString(jwt.getName()))) {
+            userRepository.save(userEntity);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Você não tem permissão para atualizar esse usuário.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso.");
     }
 }

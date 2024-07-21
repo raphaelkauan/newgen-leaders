@@ -39,7 +39,7 @@ public class LoginService {
         }
 
         var now = Instant.now();
-        var expiresIn = 800L;
+        var expiresIn = 172800000L;
 
         if(loginRequestDto.username().equals("adminSUPER")) {
             var claims = JwtClaimsSet.builder()
