@@ -41,7 +41,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserInvalid.class)
-    public ResponseEntity<?> userInvalid(UserInvalid exception) {
+    public ResponseEntity<ExceptionFilters> userInvalid(UserInvalid exception) {
+        ExceptionFilters exceptionFilters = new ExceptionFilters(
+                exception.getMessage(),
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(exceptionFilters, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PostValidationException.class)
+    public ResponseEntity<ExceptionFilters> postValidationException(PostValidationException exception) {
         ExceptionFilters exceptionFilters = new ExceptionFilters(
                 exception.getMessage(),
                 LocalDateTime.now(),

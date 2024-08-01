@@ -1,6 +1,7 @@
 package com.newgenleaders.modules.post.service;
 
 import com.newgenleaders.common.exception.PostLengthException;
+import com.newgenleaders.common.exception.PostValidationException;
 import com.newgenleaders.common.exception.UserConflictException;
 import com.newgenleaders.modules.post.controller.PostController;
 import com.newgenleaders.modules.post.dto.*;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -66,8 +68,20 @@ public class PostService {
     }
 
     public ResponseEntity<Object> getPost(UUID id) {
-        Optional<PostEntity> postDto = postRepository.findById(id);
+        Optional<PostEntity> postEntity = postRepository.findById(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(postDto);
+        if(postEntity.isEmpty()) {
+            throw new PostValidationException("Esse post não existe.");
+        }
+
+        FeedItemDto feedItemDto = new FeedItemDto(
+                postEntity.get().getPostId(),
+                postEntity.get().getTitle(),
+                postEntity.get().getContent(),
+                postEntity.get().getUserEntity().getUsername()
+        );
+        feedItemDto.add(linkTo(methodOn(PostController.class).feed(0, 10)).withRel("feed"));
+
+        return ResponseEntity.status(HttpStatus.OK).body(feedItemDto);
     }
 }
