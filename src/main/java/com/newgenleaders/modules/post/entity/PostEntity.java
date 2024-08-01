@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jdk.jfr.Name;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.time.Instant;
