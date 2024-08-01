@@ -5,6 +5,6 @@
 </div>
 
 ### Descrição: 
-Este projeto consiste em um blog desenvolvido utilizando o ecossistema Spring. Nele, o usuário pode realizar postagens de artigos, entre outras funcionalidades.
+Este projeto é um blog desenvolvido com o ecossistema Spring, permitindo que os usuários publiquem artigos e acessem diversas funcionalidades adicionais. O projeto foi criado com o objetivo de oferecer uma plataforma robusta e segura para a publicação e leitura de conteúdo.
 
-...
+### Funcionalidades
