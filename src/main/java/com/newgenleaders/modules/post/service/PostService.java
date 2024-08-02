@@ -85,7 +85,6 @@ public class PostService {
 
     public ResponseEntity<PostResponseDto> deletePost(UUID id, JwtAuthenticationToken jwt) {
         Optional<UserEntity> user = userRepository.findById(UUID.fromString(jwt.getName()));
-
         Optional<PostEntity> post = postRepository.findById(id);
 
         if(post.isEmpty()) {
@@ -103,5 +102,22 @@ public class PostService {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new PostResponseDto("Post deletado com sucesso."));
+    }
+
+    public ResponseEntity<PostResponseDto> updatePost(UUID id, PostRequestDto postRequestDto, JwtAuthenticationToken jwt) {
+        Optional<UserEntity> user = userRepository.findById(UUID.fromString(jwt.getName()));
+        Optional<PostEntity> post = postRepository.findById(id);
+
+        if(user.get().getIdUser().equals(post.get().getUserEntity().getIdUser())) {
+            PostEntity postEntity = post.get();
+            postEntity.setTitle(postRequestDto.title());
+            postEntity.setContent(postRequestDto.content());
+
+            postRepository.save(postEntity);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new PostResponseDto("Você não tem permissão para deletar esse post."));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(new PostResponseDto("Post atualizado com sucesso."));
     }
 }

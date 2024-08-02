@@ -43,4 +43,9 @@ public class PostController {
     public ResponseEntity<PostResponseDto> deletePost(@PathVariable("id") UUID id, JwtAuthenticationToken jwt) {
         return this.postService.deletePost(id, jwt);
     }
+
+    @PutMapping("/post/{id}")
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable("id") UUID id, @RequestBody @Valid PostRequestDto postRequestDto, JwtAuthenticationToken jwt) {
+        return this.postService.updatePost(id, postRequestDto, jwt);
+    }
 }
