@@ -10,7 +10,7 @@ Este projeto é um blog desenvolvido com o ecossistema Spring, permitindo que os
 ### Funcionalidades
 - Criação, edição e exclusão de postagens de artigos.
 - Autenticação e autorização de usuários.
-- Integração com serviço de mensageria
 - Paginação do feed de postagens.
+- Integração com serviço de mensageria
 - Gerenciamento de perfis de usuários, incluindo recuperação de detalhes do perfil e postagens associadas.
 - Integração com [serviço de email](https://github.com/raphaelkauan/ms-newgen-leaders-email.git) para enviar notificações.
