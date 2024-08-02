@@ -35,7 +35,12 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public ResponseEntity<Object> getPost(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Object> getPost(@PathVariable("id") UUID id) {
         return this.postService.getPost(id);
+    }
+
+    @DeleteMapping("/post/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable("id") UUID id, JwtAuthenticationToken jwt) {
+        return this.postService.deletePost(id, jwt);
     }
 }

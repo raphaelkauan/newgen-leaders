@@ -2,7 +2,6 @@ package com.newgenleaders.modules.post.service;
 
 import com.newgenleaders.common.exception.PostLengthException;
 import com.newgenleaders.common.exception.PostValidationException;
-import com.newgenleaders.common.exception.UserConflictException;
 import com.newgenleaders.modules.post.controller.PostController;
 import com.newgenleaders.modules.post.dto.*;
 import com.newgenleaders.modules.post.entity.PostEntity;
@@ -11,13 +10,11 @@ import com.newgenleaders.modules.user.entity.UserEntity;
 import com.newgenleaders.modules.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -83,5 +80,23 @@ public class PostService {
         feedItemDto.add(linkTo(methodOn(PostController.class).feed(0, 10)).withRel("feed"));
 
         return ResponseEntity.status(HttpStatus.OK).body(feedItemDto);
+    }
+
+    public ResponseEntity<?> deletePost(UUID id, JwtAuthenticationToken jwt) {
+        Optional<UserEntity> user = userRepository.findById(UUID.fromString(jwt.getName()));
+
+        Optional<PostEntity> post = postRepository.findById(id);
+
+        if(post.isEmpty()) {
+            throw new PostValidationException("Esse post não existe.");
+        }
+
+        if(user.get().getIdUser().equals(post.get().getUserEntity().getIdUser())) {
+                postRepository.deleteById(id);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não tem permissão para deletar esse post.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Post deletado com sucesso.");
     }
 }

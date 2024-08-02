@@ -1,4 +1,6 @@
 package com.newgenleaders.modules.post.dto;
 
-public record PostDto(String title, String content) {
+import java.util.UUID;
+
+public record PostDto(UUID id, String title, String content) {
 }

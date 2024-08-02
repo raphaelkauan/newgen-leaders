@@ -80,7 +80,7 @@ public class UserService {
 
         List<PostEntity> posts = postRepository.findByUserEntityUserId(userId);
         List<PostDto> postDto = posts.stream()
-                .map(post -> new PostDto(post.getTitle(), post.getContent()))
+                .map(post -> new PostDto(post.getPostId(), post.getTitle(), post.getContent()))
                 .toList();
 
         UserProfileDto userProfileDto = new UserProfileDto(userDto, postDto);
