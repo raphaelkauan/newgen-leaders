@@ -6,6 +6,7 @@ import com.newgenleaders.modules.post.controller.PostController;
 import com.newgenleaders.modules.post.dto.*;
 import com.newgenleaders.modules.post.entity.PostEntity;
 import com.newgenleaders.modules.post.repository.PostRepository;
+import com.newgenleaders.modules.role.entity.RoleEntity;
 import com.newgenleaders.modules.user.entity.UserEntity;
 import com.newgenleaders.modules.user.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -82,7 +83,7 @@ public class PostService {
         return ResponseEntity.status(HttpStatus.OK).body(feedItemDto);
     }
 
-    public ResponseEntity<?> deletePost(UUID id, JwtAuthenticationToken jwt) {
+    public ResponseEntity<PostResponseDto> deletePost(UUID id, JwtAuthenticationToken jwt) {
         Optional<UserEntity> user = userRepository.findById(UUID.fromString(jwt.getName()));
 
         Optional<PostEntity> post = postRepository.findById(id);
@@ -91,12 +92,16 @@ public class PostService {
             throw new PostValidationException("Esse post não existe.");
         }
 
-        if(user.get().getIdUser().equals(post.get().getUserEntity().getIdUser())) {
+        var isAdm = user.get().getRoleEntities()
+                .stream()
+                .anyMatch(role -> role.getName().equalsIgnoreCase(RoleEntity.Values.admin.name()));
+
+        if(isAdm || user.get().getIdUser().equals(post.get().getUserEntity().getIdUser())) {
                 postRepository.deleteById(id);
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não tem permissão para deletar esse post.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new PostResponseDto("Você não tem permissão para deletar esse post."));
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body("Post deletado com sucesso.");
+        return ResponseEntity.status(HttpStatus.OK).body(new PostResponseDto("Post deletado com sucesso."));
     }
 }

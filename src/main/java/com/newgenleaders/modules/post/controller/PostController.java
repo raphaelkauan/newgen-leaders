@@ -40,7 +40,7 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable("id") UUID id, JwtAuthenticationToken jwt) {
+    public ResponseEntity<PostResponseDto> deletePost(@PathVariable("id") UUID id, JwtAuthenticationToken jwt) {
         return this.postService.deletePost(id, jwt);
     }
 }

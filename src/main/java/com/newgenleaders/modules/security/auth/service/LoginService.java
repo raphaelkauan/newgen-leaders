@@ -1,6 +1,7 @@
 package com.newgenleaders.modules.security.auth.service;
 
 import com.newgenleaders.common.exception.UserConflictException;
+import com.newgenleaders.modules.role.entity.RoleEntity;
 import com.newgenleaders.modules.security.auth.dto.LoginRequestDto;
 import com.newgenleaders.modules.security.auth.dto.LoginResponseDto;
 import com.newgenleaders.modules.user.entity.UserEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LoginService {
@@ -35,7 +37,7 @@ public class LoginService {
         Optional<UserEntity> user = userRepository.findByUsername(loginRequestDto.username());
 
         if(user.isEmpty() || !user.get().isLoginCorrect(loginRequestDto, bCryptPasswordEncoder)) {
-            throw new BadCredentialsException("Usuário ou senha incorreto!");
+            throw new BadCredentialsException("Usuário ou senha incorreto.");
         }
 
         var now = Instant.now();
@@ -55,11 +57,16 @@ public class LoginService {
             return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDto(jwtValue));
         }
 
+        var scope = user.get().getRoleEntities()
+                .stream().map(RoleEntity::getName)
+                .collect(Collectors.joining(" "));
+
         var claims = JwtClaimsSet.builder()
                 .issuer("api")
                 .subject(user.get().getIdUser().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
+                .claim("scope", scope)
                 .build();
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
