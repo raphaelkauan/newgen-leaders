@@ -1,4 +1,4 @@
-## newgen-leaders
+## Newgen Leaders 🗞️
 
 <div align="center">
   <img src="https://github.com/raphaelkauan/newgen-leaders/assets/111379005/ed75e89d-8ed9-4642-9d52-4043423e772b" width="400" alt="img">
