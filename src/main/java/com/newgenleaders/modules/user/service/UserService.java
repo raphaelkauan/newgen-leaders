@@ -10,15 +10,20 @@ import com.newgenleaders.modules.role.repository.RoleRepository;
 import com.newgenleaders.modules.user.dto.*;
 import com.newgenleaders.modules.user.entity.UserEntity;
 import com.newgenleaders.modules.user.repository.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
 @Service
@@ -29,6 +34,9 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final RabbitTemplate rabbitTemplate;
     private final PostRepository postRepository;
+
+    @Value("${img.dir}")
+    private String UPLOAD_DIR;
 
     public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository, RabbitTemplate rabbitTemplate, PostRepository postRepository) {
         this.userRepository = userRepository;
@@ -105,5 +113,37 @@ public class UserService {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDto("Usário criado com sucesso."));
+    }
+
+    public ResponseEntity<UserResponseDto> uploadImgProfile(MultipartFile file, JwtAuthenticationToken jwt) {
+        if(file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new UserResponseDto("Imagem vazia."));
+        }
+
+        try {
+            int number = new Random().nextInt(10000);
+
+            String filePath = this.UPLOAD_DIR + number + "_" + file.getOriginalFilename();
+            file.transferTo(new File(filePath));
+
+            Optional<UserEntity> user = userRepository.findById(UUID.fromString(jwt.getName()));
+
+            if(user.isPresent()) {
+                if(!user.get().getImg_url().isEmpty()) {
+                    String imgUrl = user.get().getImg_url();
+                    Files.deleteIfExists(Path.of(imgUrl));
+                }
+
+                UserEntity userEntity = user.get();
+                userEntity.setImg_url(filePath);
+                userRepository.save(userEntity);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDto("Imagem salva com sucesso."));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

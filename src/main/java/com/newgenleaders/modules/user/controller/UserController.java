@@ -6,9 +6,11 @@ import com.newgenleaders.modules.user.dto.UserResponseDto;
 import com.newgenleaders.modules.user.dto.UserUpdateDto;
 import com.newgenleaders.modules.user.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -32,8 +34,13 @@ public class UserController {
     }
 
     @PutMapping("/profile/settings/{user_id}")
-    public ResponseEntity<?> userUpdate(@PathVariable(value = "user_id") UUID userId, @RequestBody @Valid UserUpdateDto userUpdateDto,
+    public ResponseEntity<UserResponseDto> userUpdate(@PathVariable(value = "user_id") UUID userId, @RequestBody @Valid UserUpdateDto userUpdateDto,
     JwtAuthenticationToken jwt) {
         return userService.userUpdate(userId, userUpdateDto, jwt);
+    }
+
+    @PostMapping("/profile/settings")
+    public ResponseEntity<UserResponseDto> uploadImgProfile(@RequestParam("file") MultipartFile file, JwtAuthenticationToken jwt) {
+        return userService.uploadImgProfile(file, jwt);
     }
 }

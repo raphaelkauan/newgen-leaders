@@ -1,7 +1,6 @@
 package com.newgenleaders.modules.post.controller;
 
 import com.newgenleaders.modules.post.dto.FeedDto;
-import com.newgenleaders.modules.post.dto.PostDto;
 import com.newgenleaders.modules.post.dto.PostRequestDto;
 import com.newgenleaders.modules.post.dto.PostResponseDto;
 import com.newgenleaders.modules.post.service.PostService;

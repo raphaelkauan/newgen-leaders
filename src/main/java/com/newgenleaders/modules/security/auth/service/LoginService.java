@@ -1,6 +1,5 @@
 package com.newgenleaders.modules.security.auth.service;
 
-import com.newgenleaders.common.exception.UserConflictException;
 import com.newgenleaders.modules.role.entity.RoleEntity;
 import com.newgenleaders.modules.security.auth.dto.LoginRequestDto;
 import com.newgenleaders.modules.security.auth.dto.LoginResponseDto;

@@ -32,6 +32,8 @@ public class UserEntity implements Serializable {
 
     private String password;
 
+    private String img_url;
+
     @CreationTimestamp
     private Instant created_at;
 
@@ -76,6 +78,14 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 
     public Instant getCreated_at() {
