@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
 @Service
@@ -84,7 +83,12 @@ public class UserService {
         }
 
         UserEntity userEntity = findUser.get();
-        UserDto userDto = new UserDto(userEntity.getIdUser(), userEntity.getUsername(), userEntity.getEmail());
+        UserDto userDto = new UserDto(
+                userEntity.getIdUser(),
+                userEntity.getUsername(),
+                userEntity.getEmail(),
+                userEntity.getImg_url()
+        );
 
         List<PostEntity> posts = postRepository.findByUserEntityUserId(userId);
         List<PostDto> postDto = posts.stream()
@@ -142,7 +146,7 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDto("Imagem salva com sucesso."));
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Não foi possível fazer upload." + e);
         }
 
     }
