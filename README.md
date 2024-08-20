@@ -18,7 +18,7 @@ Este projeto uma api desenvolvida para um blog que permite que os usuários publ
 <br>
 
 ### Swagger:
-**Route:** `http://localhost:8080/swagger-ui/index.html#/post-controller`
+**Route:** `http://localhost:8080/swagger-ui/index.html`
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/2f0e55cc-45e5-451d-81bd-6b5047be94e9" width="1000" alt="img">
