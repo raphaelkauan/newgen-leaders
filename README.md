@@ -11,7 +11,7 @@ Este projeto é uma api desenvolvida para um blog que permite que os usuários p
 - Paginação do feed de postagens.
 - Criação, edição e exclusão de postagens de artigos.
 - Autenticação e autorização de usuários.
-- Integração com serviço de mensageria para envio de email.
+- Integração com serviço de mensageria.
 - Gerenciamento de perfis de usuários, incluindo recuperação de detalhes do perfil e postagens associadas.
 - Integração com [serviço de email](https://github.com/raphaelkauan/ms-newgen-leaders-email.git) para enviar notificações.
 
