@@ -24,3 +24,8 @@ Este projeto é uma API desenvolvida para um blog que permite que os usuários p
   <img src="https://github.com/user-attachments/assets/2f0e55cc-45e5-451d-81bd-6b5047be94e9" width="1000" alt="img">
 </div>
 
+---
+
+<div align="center">
+  <sub>© 2024 Newgen Leaders</sub>
+</div>
