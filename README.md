@@ -5,7 +5,7 @@
 </div>
 
 ### Descrição: 
-Este projeto é uma api desenvolvida para um blog que permite que os usuários publiquem artigos com diversas funcionalidades adicionais. O projeto foi criado com o objetivo de oferecer uma plataforma robusta e segura para a publicação e leitura de conteúdo.
+Este projeto é uma API desenvolvida para um blog que permite que os usuários publiquem artigos e explorem diversas funcionalidades. O projeto foi criado com o objetivo de oferecer uma plataforma robusta e segura para a publicação e leitura de conteúdo.
 
 ### Funcionalidades
 - Paginação do feed de postagens.
